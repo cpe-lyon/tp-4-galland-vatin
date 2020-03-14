@@ -393,17 +393,18 @@ chmod 740 fichier
 ```
 
 
-**10)** Un umask (user file creation mode mask) permet de définir les droits par défaut d’un nouveau fichier / dossier. Il s'agit d'une valeur (en octal) qui indique les droits que N'AURA PAS le fichier / dossier. (C'est donc le complément à 777 du chmod).
+**10)** Un umask (user file creation mode mask) permet de définir les droits par défaut d’un nouveau fichier / dossier. Il s'agit d'une valeur (en octal) qui indique les droits que N'AURA PAS le fichier / dossier. (C'est donc le complément à 777 (pour un dossier, et 666 pour un fichier) du chmod).
 
 On définit  un umask très restrictif qui interdit à quiconque à part nous l’accès en lecture ou en écriture, ainsi que la traversée de nos répertoires, puis on teste sur un nouveau fichier et un nouveau répertoire :
 
 ``` bash
-umask 177
-
 mkdir umask_restreint
 
-touch umask_restreint/test
+cd umask_restreint
 
+umask 177
+
+touch umask_restreint/test
 ```
 
 Pour tester les droits on utilise ``umask -S``, dans le dossier créé, qui affiche les droits sous forme détaillée (en précisant explicitement la catégorie d'utilisateur et les droits associés)
@@ -412,21 +413,24 @@ Pour tester les droits on utilise ``umask -S``, dans le dossier créé, qui affi
 **11)** On définit désormais un umask très permissif qui autorise tout le monde à lire nos fichiers et traverser nos répertoires, mais n’autorise que nous à écrire, avant de le tester sur un nouveau fichier et un nouveau répertoire :
 
 ``` bash
-umask 022
-
 mkdir umask_permissif
 
-touch umask_permissif/test
+cd umask_permissif
 
+umask 177
+
+touch umask_permissif/test
 ```
 
 
 **12)** Enfin, on définit un umask équilibré qui nous autorise un accès complet et autorise un accès en lecture aux membres de notre groupe, puis on le teste.
 
 ``` bash
-umask 033
-
 mkdir umask_equilibre
+
+cd umask_equilibre
+
+umask 177
 
 touch umask_equilibre/test
 ```
