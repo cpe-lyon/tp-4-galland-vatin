@@ -374,7 +374,7 @@ On tente alors de créer, supprimer, ou modifier un fichier dans le répertoire 
 
 Il apparaît donc que le droit d’exécution du répertoire est nécessaire pour presque toutes les actions usuelles : aller dans le répertoire avec cd, lire ou écrire un fichier, ...
 
-En fait toutes les commandes dans un répertoire nécessitent le droit d'exécution dudit répertoire. 
+En fait toutes les commandes executées dans un repertoire sont executées avec les droits de l'utilisateur sur ce répertoire. 
 
 
 **8)** On rétablit le droit en exécution du répertoire test (``chmod 700 test``). On se positionne alors dans ce répertoire et on retire à nouveau le droit d’exécution (``chmod 600 test``). 
@@ -404,12 +404,9 @@ mkdir umask_restreint
 
 touch umask_restreint/test
 
-umask -S umask_restreint
-
-umask -S umask_restreint/test
 ```
 
-``umask -S`` affiche les droits sous forme détaillée (en précisant explicitement la catégorie d'utilisateur et les droits associés)
+Pour tester les droits on utilise ``umask -S``, dans le dossier créé, qui affiche les droits sous forme détaillée (en précisant explicitement la catégorie d'utilisateur et les droits associés)
 
 
 **11)** On définit désormais un umask très permissif qui autorise tout le monde à lire nos fichiers et traverser nos répertoires, mais n’autorise que nous à écrire, avant de le tester sur un nouveau fichier et un nouveau répertoire :
@@ -421,9 +418,6 @@ mkdir umask_permissif
 
 touch umask_permissif/test
 
-umask -S umask_permissif
-
-umask -S umask_permissif/test
 ```
 
 
@@ -435,16 +429,12 @@ umask 033
 mkdir umask_equilibre
 
 touch umask_equilibre/test
-
-umask -S umask_equilibre
-
-umask -S umask_equilibre/test
 ```
 
 
-**13)** On va maintenant faire la transcription entre des commandes "orales" et des commandes "écrites" : 
+**13)** On va maintenant faire la transcription entre des commandes en notation octale et des commandes en notation classique : 
 
-| oral  | écrit          | droits originaux de **fic**|
+| notation classique  | notation octale          | droits originaux de **fic**|
 | :--------------- |:---------------|:---------------|
 | chmod u=rx,g=wx,o=r fic  |chmod 532 | inconnus|
 | chmod u0+w, g-rx  | chmod 602 |   r - -r - x - - - <=> 450|
@@ -464,4 +454,4 @@ Ainsi les droits en écriture sont détenus par le seul propriétaire (root), ma
 
 Le propriétaire en question est root.
 
-Ce fichier est très important pour l'identification : il est donc nécessaire que n'importe qui ne puisse pas le modifier. En revanche, son affichage ne pose pas de failles de sécurité, car les données sensibles sont dans /etc/shadow et non dans /etc/group.
+Ce fichier est très important pour l'identification : il est donc nécessaire que n'importe qui ne puisse pas le modifier. En revanche, son affichage ne pose pas de failles de sécurité, car les données sensibles sont dans /etc/shadow et non dans /etc/passwd.
